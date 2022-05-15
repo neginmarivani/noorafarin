@@ -1,22 +1,29 @@
-const express = require("express")
-const graphqlHttp = require("express-graphql")
-const mongoose = require("mongoose")
-const graphqlSchema = require("./graphql/schema")
-const graphqlResolvers = require("./graphql/resolvers")
+const express = require("express");
+const graphqlHttp = require("express-graphql").graphqlHTTP
+;
+const mongoose = require("mongoose");
+const graphqlSchema = require("./graphql/schema");
+const graphqlResolvers = require("./graphql/resolvers");
 
-const app = express()
+const app = express();
+
+/* We tie it all together with express, so a user can access the endpoint */
+// app.get('/api', graphqlHTTP({
+//     schema: schema,
+//     rootValue: root
+// }));
 
 app.use(
-  "/graphql",
+  '/graphql',
   graphqlHttp({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
     graphiql: true,
   })
-)
+);
 
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
-mangoose.connect('mongodb://localhost:27017/crypto_database' , options)
+mongoose.connect('mongodb://localhost:27017/crypto_database' , options)
 .then(()=> {
   console.log('database is connected successfully');
   app.listen(4000, () => console.log("Server is running on localhost:4000"));

@@ -5,30 +5,30 @@ const Schema = mongoose.Schema
 const coinSchema = new Schema(
   {
     Date :{
-        type: Date,
+        type: String,
         required: true,
     },
     Open : {
-        type : Float ,
+        type : Number ,
         required : true,
     },
     High :{
-        type : Float ,
+        type : Number,
         required : true,
     },
     Low : {
-        type : Float ,
+        type : Number ,
         required : true,
     },
     Close : {
-        type : Float ,
+        type : Number,
         required : true,
     },
     Volume :{
-        type : Int ,
+        type : Number ,
         required : true,
     },
   }
 )
 
-module.exports = mongoose.model("BTC", coinSchema)
+module.exports = mongoose.model("Bitcoin", coinSchema ,"BTC" )
