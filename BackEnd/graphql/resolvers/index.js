@@ -1,9 +1,9 @@
-const Coin = require("../../models/coin")
+const BTC = require("../../models/coin")
 
 module.exports = {
   coins: async () => {
     try {
-      const coinsFetched = await Coin.find()
+      const coinsFetched = await BTC.find()
       return coinsFetched.map(coin => {
         return {
             _id: coin._id,

@@ -11,11 +11,9 @@ module.exports = buildSchema(`
     Close : Float!
     Volume :Int!
   }
-
   type Query {
     coins:[Coin!]
   }
-
   schema {
     query: Query
   }

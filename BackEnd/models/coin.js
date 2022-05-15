@@ -31,4 +31,4 @@ const coinSchema = new Schema(
   }
 )
 
-module.exports = mongoose.model("Coin", coinSchema)
+module.exports = mongoose.model("BTC", coinSchema)
