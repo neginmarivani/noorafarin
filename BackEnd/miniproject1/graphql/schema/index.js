@@ -2,7 +2,7 @@ const { buildSchema } = require('graphql')
 
 module.exports = buildSchema(`
 
-  type BTC {
+  type dailyCandle {
     _id: ID!
     Date: String!
     Open: Float!
@@ -12,7 +12,7 @@ module.exports = buildSchema(`
     Volume: Int!
   }
   type Query {
-    coins:[BTC!]
+    dailyCandleData:[dailyCandle!]
   }
   schema {
     query: Query

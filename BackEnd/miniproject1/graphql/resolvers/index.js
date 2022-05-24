@@ -1,9 +1,9 @@
-const Bitcoin = require('../../models/coin')
+const dailyCandleDataSchema = require('../../models/candleData')
 
 module.exports = {
-  coins: async () => {
-    const coinsFetched = await Bitcoin.find()
-    return coinsFetched.map(coin => {
+  dailyCandleData: async () => {
+    const dataFetched = await dailyCandleDataSchema.find()
+    return dataFetched.map(coin => {
       return {
         _id: coin._id,
         Date: coin.Date,
