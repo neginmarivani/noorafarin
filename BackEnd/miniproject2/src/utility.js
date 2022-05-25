@@ -2,50 +2,56 @@ const signal = require('./models/signal')
 const decision = require('./models/decision')
 const _ = require('underscore')
 
-function count_element_occurance (array) {
-  let a = []
-  let b = []
-  let arr = [...array]
+function countElementOccurance (array) {
+  const a = []
+  const b = []
+  const arr = [...array]
   let prev
 
   arr.sort()
-  for (let element of arr) {
+  for (const element of arr) {
     if (element !== prev) {
       a.push(element)
       b.push(1)
     } else ++b[b.length - 1]
     prev = element
   }
-
   return [a, b]
 }
 
+async function confirmedDecisionOnTargetSignal () {
+  const targetSignalsIds = await targetSignalsId()
+  return decision.Decision.find(
+    {
+      $and: [
+        { analystDecision: 'confirm' },
+        { signal: { $in: targetSignalsIds } }
+      ]
+    },
+    'analyst'
+  )
+}
+async function rejectedDecisionOnStopSignal () {
+  const stopSignalsIds = await stopSignalsId()
+  return decision.Decision.find(
+    {
+      $and: [{ analystDecision: 'reject' }, { signal: { $in: stopSignalsIds } }]
+    },
+    'analyst'
+  )
+}
+function targetSignalsId () {
+  return signal.Signal.find({ signalStatus: 'target' }, '_id')
+}
+function stopSignalsId () {
+  return signal.Signal.find({ signalStatus: 'stop' }, '_id')
+}
+
 async function getAnalystsBasedOnScore () {
-  
-  targetSignals_ids = await signal.Signal.find({ signal_status: 'target' },'_id')
-  stopSignals_ids = await signal.Signal.find({ signal_status: 'stop' }, '_id')
-
-  const TPDecisions = await decision.Decision.find(
-    {
-      $and: [
-        { analyst_decision: 'confirm' },
-        // { signal: { $in: targetSignals_ids } }
-      ]
-    },
-    'analyst'
-  )
-  const FNDecisions = await decision.Decision.find(
-    {
-      $and: [
-        { analyst_decision: 'reject' },
-        // { signal: { $in: stopSignals_ids } }
-      ]
-    },
-    'analyst'
-  )
-  let correctDes = []
-  let analyst_info = []
-
+  const TPDecisions = await confirmedDecisionOnTargetSignal()
+  const FNDecisions = await rejectedDecisionOnStopSignal()
+  const correctDes = []
+  const analystInfo = []
   _.map(FNDecisions, function (element) {
     correctDes.push(element.analyst)
   })
@@ -53,23 +59,29 @@ async function getAnalystsBasedOnScore () {
     correctDes.push(element.analyst)
   })
 
-  correct_analysts = count_element_occurance(correctDes)
+  const correctAnalysts = countElementOccurance(correctDes)
 
   let iter = 0
-  for (const analyst_name of correct_analysts[0]) {
-    const totalDes = await decision.Decision.count({ analyst: analyst_name })
-    const corDes = correct_analysts[1][iter]
-    analyst_info.push({
-      name: analyst_name,
-      total_decisions: totalDes,
-      correct_decisions: corDes,
+  for (const analystName of correctAnalysts[0]) {
+    const totalDes = await decision.Decision.count({ analyst: analystName })
+    const corDes = correctAnalysts[1][iter]
+    analystInfo.push({
+      name: analystName,
+      totalDecisions: totalDes,
+      correctDecisions: corDes,
       score: corDes / totalDes
     })
     iter++
   }
-  console.log(analyst_info.sort((a, b) => b.score - a.score))
+  analystInfo.sort((a, b) => b.score - a.score)
+  console.log(analystInfo)
+  return analystInfo
 }
 
 module.exports = {
+  targetSignalsId,
+  stopSignalsId,
+  confirmedDecisionOnTargetSignal,
+  rejectedDecisionOnStopSignal,
   getAnalystsBasedOnScore
 }

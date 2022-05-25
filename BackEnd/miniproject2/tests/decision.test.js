@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const decision = require('../src/models/decision')
 const db = require('./setup/db')
 
@@ -27,6 +26,6 @@ describe('Decision model', () => {
     // Object Id should be defined when successfully saved to MongoDB.
     expect(savedDecision._id).toBeDefined()
     expect(savedDecision.analyst).toBe('dawod')
-    expect(savedDecision.analyst_decision).toBe('reject')
+    expect(savedDecision.analystDecision).toBe('reject')
   })
 })

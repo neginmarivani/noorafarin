@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 const Signal = mongoose.model(
   'Signal',
   new mongoose.Schema({
-    signal_number: {
+    signalNumber: {
       type: Number,
       required: true
     },
-    signal_status: {
+    signalStatus: {
       type: String,
       required: true,
       default: 'open',
@@ -16,17 +16,17 @@ const Signal = mongoose.model(
   })
 )
 
-async function createSignal (signal_number, signal_status) {
+async function createSignal (signalNumber, signalStatus) {
   try {
     const signal = new Signal({
-      signal_number,
-      signal_status
+      signalNumber,
+      signalStatus
     })
     const result = await signal.save()
-    // console.log(result)
+    console.log(result)
     return result
   } catch (err) {
-    console.log('err' + err);
+    console.log('err' + err)
   }
 }
 module.exports = {

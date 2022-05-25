@@ -7,7 +7,7 @@ const Decision = mongoose.model(
       type: String,
       required: true
     },
-    analyst_decision: {
+    analystDecision: {
       type: String,
       required: true,
       enum: ['confirm', 'reject']
@@ -19,28 +19,28 @@ const Decision = mongoose.model(
   })
 )
 
-async function createDecision (analyst, analyst_decision, signal) {
-  try{
+async function createDecision (analyst, analystDecision, signal) {
+  try {
     const decision = new Decision({
       analyst,
-      analyst_decision,
+      analystDecision,
       signal
     })
     const result = await decision.save()
     // console.log(result)
     return result
-  }catch (err) {
-    console.log('err' + err);
+  } catch (err) {
+    console.log('err' + err)
   }
 }
 
 async function listDecisions () {
-  const decisions = await find().populate('signal', 'signal_status -_id')
+  const decisions = await Decision.find().populate('signal', 'signalStatus -_id')
   console.log(decisions)
 }
 
 module.exports = {
   Decision,
   createDecision,
-  listDecisions 
+  listDecisions
 }
