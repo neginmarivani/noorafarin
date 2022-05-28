@@ -21,7 +21,7 @@ mongoose
   .connect('mongodb://localhost:27017/crypto_database', options)
   .then(() => {
     console.log('database is connected successfully')
-    loader.bitcoinDailyDataScrapper()
+    loader.bitcoinDailyDataScrapper(2)
     app.listen(4000, () => console.log('Server is running on localhost:4000'))
   })
   .catch(err => console.error('could not connect to MongoDB...', err))
